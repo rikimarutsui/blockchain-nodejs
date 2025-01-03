@@ -22,6 +22,7 @@ class Transaction {
     amount;
     message;
     timestamp;
+    txid;
 
     /**
      * @constructor
@@ -37,6 +38,7 @@ class Transaction {
         this.amount = amount;
         this.message = message;
         this.timestamp = new Date().toISOString();
+        this.txid = this.calculateHash();
     }
 
     /**

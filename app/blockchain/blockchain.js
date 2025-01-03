@@ -89,9 +89,131 @@ class Blockchain {
     return this.#chain.find((block) => block.hash === hash);
   }
 
-  /************
-   * Setter
-   ***********/
+  /**
+   * @function getPendingTransactions
+   * @description Get the pending transactions
+   * @memberof Blockchain
+   * @returns { Transaction[] } The Pending Transactions Array
+   */
+  getPendingTransactions(){
+    return this.#pendingTransactions;
+  }
+
+  /**
+   * @function getPendingTransactionsFromAddress
+   * @description Get the pending transactions from an address
+   * @memberof Blockchain
+   * @param { string } fromAddress 
+   * @returns { Transaction[] } The Pending Transactions Array from an address
+   */
+  getPendingTransactionsFromAddress(fromAddress){
+    return this.#pendingTransactions.filter((tx) => tx.fromAddress === fromAddress);
+  }
+
+  /**
+   * @function getPendingTransactionsToAddress
+   * @description Get the pending transactions to an address
+   * @memberof Blockchain
+   * @param { string } toAddress
+   * @returns { Transaction[] } The Pending Transactions Array to an address
+   */
+  getPendingTransactionsToAddress(toAddress){
+    return this.#pendingTransactions.filter((tx) => tx.toAddress === toAddress);
+  }
+
+  /**
+   * @function getPendingBalances
+   * @description Get the pending balances
+   * @memberof Blockchain
+   * @returns {Object} The pending balances
+   */
+  getPendingBalances(){
+    return this.#pendingBalances;
+  }
+
+  /**
+   * @function getPendingBalanceByFromAddress
+   * @description Get the pending balance by from address
+   * @memberof Blockchain
+   * @param {string} fromAddress
+   * @returns {number} The pending balance for the given from address
+   */
+  getPendingBalanceByFromAddress(fromAddress){
+    return this.#pendingBalances[fromAddress] || null;
+  }
+
+  /******************
+   * Wallet Functions
+   *****************/
+
+  /**
+   * @function getBalanceOfAddress
+   * @description Get the balance of an address
+   * @memberof Blockchain
+   * @param {string} address
+   * @returns {number} The balance of the address
+   */
+  getBalanceOfAddress(address) {
+    let balance = 0;
+
+    for (const block of this.#chain) {
+      for (const trans of block.transactions) {
+        if (trans.fromAddress === address) {
+          balance -= trans.amount;
+        }
+
+        if (trans.toAddress === address) {
+          balance += trans.amount;
+        }
+      }
+    }
+
+    // Subtract pending transactions from balance to prevent double spending
+    if (this.#pendingBalances[address]) {
+      balance = this.#pendingBalances[address];
+    }
+
+    return balance;
+  }
+
+  /**
+   * @function getAllTransactionsOfAddress
+   * @description Get all transactions for a wallet
+   * @memberof Blockchain
+   * @param {string} address
+   * @returns {Array<Transaction>} The transactions for the wallet
+   */
+  getAllTransactionsOfAddress(address) {
+    const txs = [];
+
+    for (const block of this.#chain) {
+      for (const tx of block.transactions) {
+        if (tx.fromAddress === address || tx.toAddress === address) {
+          txs.push(tx);
+        }
+      }
+    }
+
+    return txs;
+  }
+
+  /**
+   * @function getTransactionByTxid
+   * @description Get the transaction by txid
+   * @memberof Blockchain
+   * @param {string} txid
+   * @returns {Transaction} The transaction with the given txid
+   */
+  getTransactionByTxid(txid) {
+    for (let i = 1; i < this.#chain.length; i++) {
+      for (let j = 0; j < this.#chain[i].transactions.length; j++) {
+        if (this.#chain[i].transactions[j].txid === txid) {
+          return this.#chain[i].transactions[j];
+        }
+      }
+    }
+    return null;
+  }
 
   /*************
    * Functions
@@ -208,62 +330,6 @@ class Blockchain {
       }
     }
     return true;
-  }
-
-
-  /******************
-   * Wallet Functions
-   *****************/
-
-  /**
-   * @function getBalanceOfAddress
-   * @description Get the balance of an address
-   * @memberof Blockchain
-   * @param {string} address
-   * @returns {number} The balance of the address
-   */
-  getBalanceOfAddress(address) {
-    let balance = 0;
-
-    for (const block of this.#chain) {
-      for (const trans of block.transactions) {
-        if (trans.fromAddress === address) {
-          balance -= trans.amount;
-        }
-
-        if (trans.toAddress === address) {
-          balance += trans.amount;
-        }
-      }
-    }
-
-    // Subtract pending transactions from balance to prevent double spending
-    if (this.#pendingBalances[address]) {
-      balance = this.#pendingBalances[address];
-    }
-
-    return balance;
-  }
-
-  /**
-   * @function getAllTransactionsOfAddress
-   * @description Get all transactions for a wallet
-   * @memberof Blockchain
-   * @param {string} address
-   * @returns {Array<Transaction>} The transactions for the wallet
-   */
-  getAllTransactionsOfAddress(address) {
-    const txs = [];
-
-    for (const block of this.#chain) {
-      for (const tx of block.transactions) {
-        if (tx.fromAddress === address || tx.toAddress === address) {
-          txs.push(tx);
-        }
-      }
-    }
-
-    return txs;
   }
 }
 
