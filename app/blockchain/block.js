@@ -17,13 +17,13 @@ class Block {
    * @param {Transaction[]} transactions 
    * @param {string} previousHash
    */
-  constructor(index, timestamp, transactions, previousHash = "") {
+  constructor(index, timestamp, transactions, previousHash = "", hash = null, nonce = 0) {
     this.index = index;
     this.timestamp = timestamp;
     this.transactions = transactions;
     this.previousHash = previousHash;
-    this.hash = this.calculateHash();
-    this.nonce = 0;
+    this.hash = hash? hash : this.calculateHash();
+    this.nonce = nonce;
   }
 
   /**

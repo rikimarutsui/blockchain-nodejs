@@ -33,8 +33,14 @@ router.get('/create', function(req, res, next) {
 /**
  * @swagger
  * /api/wallet/private:
- *  get:
+ *  post:
  *      description: Get wallet information from private key
+ *      parameters:
+ *          - name: privateKey
+ *            description: The private key of the wallet
+ *            in: formData
+ *            required: true
+ *            type: string
  *      responses:
  *          200:
  *              description: Success
@@ -52,6 +58,32 @@ router.post('/private', function(req, res, next) {
  * /api/wallet/send:
  *  post:
  *      description: Send a transaction
+ *      parameters:
+ *          - name: sender
+ *            description: The address of the sender
+ *            in: formData
+ *            required: true
+ *            type: string
+ *          - name: recipient
+ *            description: The address of the recipient
+ *            in: formData
+ *            required: true
+ *            type: string
+ *          - name: amount
+ *            description: The amount of the transaction
+ *            in: formData
+ *            required: true
+ *            type: string
+ *          - name: privateKey
+ *            description: The private key of the sender
+ *            in: formData
+ *            required: true
+ *            type: string
+ *          - name: message
+ *            description: The message of the transaction
+ *            in: formData
+ *            required: true
+ *            type: string
  *      responses:
  *          200:
  *              description: Success

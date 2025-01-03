@@ -1,11 +1,15 @@
 var express = require('express')
 var router = express.Router();
 
+/* Import P2P Server */
+const P2PServer = require('../app/network/P2PServer');
+
 /* Import Blockchain */
 const { Blockchain } = require('../app/blockchain/blockchain');
 
 /* Create a new blockchain */
 let blockchain = new Blockchain().getInstance();
+let p2pServer = new P2PServer().getInstance();
 
 /* APIs */
 
@@ -81,8 +85,14 @@ router.get('/block/hash/:hash', function(req, res, next) {
 /**
  * @swagger
  * /api/blockchain/mine:
- *  get:
+ *  post:
  *      description: Mine a new block
+ *      parameters:
+ *          - name: address
+ *            description: The address of the miner
+ *            in: formData
+ *            required: true
+ *            type: string
  *      responses:
  *          200:
  *              description: Success
@@ -90,6 +100,7 @@ router.get('/block/hash/:hash', function(req, res, next) {
 router.post('/mine', function(req, res, next) {
     const address = req.body.address;
     const block = blockchain.minePendingTransactions(address);
+    p2pServer.broadcast({ type: 'NEW_BLOCK', block: block });
     res.json(block);
 });
 

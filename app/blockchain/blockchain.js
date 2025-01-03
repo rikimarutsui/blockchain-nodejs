@@ -48,6 +48,24 @@ class Blockchain {
   }
 
   /**
+   * @function replaceChain
+   * @description Replace the clain
+   * @memberof Blockchain
+   */
+  replaceChain(newChain) {
+    if (newChain.length < this.#chain.length) {
+      console.log('Received chain is not longer than the current chain.');
+      return;
+    } else if (!this.isChainValid(newChain)) {
+      console.log('The received chain is not valid.');
+      return;
+    }
+
+    console.log('Replacing blockchain with the new chain.');
+    this.#chain = newChain;
+  }
+
+  /**
    * @function getLatestBlock
    * @description Get the latest block
    * @memberof Blockchain
@@ -270,6 +288,7 @@ class Blockchain {
 
     this.#pendingTransactions = [];
     this.#pendingBalances = {};
+
     return block;
   }
 
