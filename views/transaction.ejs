@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transaction Platform - Root version</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <form method="post" action="/transaction/create" id="form" class="validate form">
+      <h2>Transaction Platform - Root version</h2>
+      <p>Enter Details to create a transaction</p>
+      <div class="form-field">
+        <label for="sender">Sender Name:</label>
+        <input type="text" id="recipient" name="sender" required />
+      </div>
+      <div class="form-field">
+        <label for="recipient">Recipient Name:</label>
+        <input type="text" id="recipient" name="recipient" required />
+      </div>
+      <div class="form-field">
+        <label for="amount">HKDT:</label>
+        <input type="number" id="amount" name="amount" required />
+      </div>
+      <div class="form-field">
+        <input type="submit" value="Create a Transaction" />
+      </div>
+      <div class="crtid">
+        <% if (txid) { %>
+          <p class="btn">TxID: <%= txid %>
+          </p>
+          <% } %>
+      </div>
+      <!--div class="links">
+        <a class="back" href="/verify-certificate">Verify Certificate</a>
+      </div-->
+    </form>
+  
+  </body>
+  
+  </html>
