@@ -5,9 +5,8 @@ var router = express.Router();
 const { Blockchain } = require('../app/blockchain/blockchain');
 const { Wallet } = require('../app/blockchain/wallet');
 const { Transaction } = require('../app/blockchain/transaction');
-let blockchainUtil = require('../app/blockchain/util');
 
-
+/* Connect to the Blockchain */
 let blockchain = new Blockchain().getInstance();
 
 /***********

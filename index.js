@@ -1,13 +1,12 @@
 /* Import Libraries */
+const WebSocket = require('ws');
 const express = require('express');
 const bodyParser = require('body-parser');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
 
 /* Import Blockchain */
-const { Block } = require('./app/blockchain/block');
 const { Blockchain } = require('./app/blockchain/blockchain');
-let blockchainUtil = require('./app/blockchain/util');
 
 /* Swagger Configuration */
 const swaggerOptions = {
@@ -27,7 +26,7 @@ const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
 /* Server Initialization */
 const app = express();
-const port = process.env.PORT || 3000;
+const HTTP_PORT = process.env.PORT || 3000;
 
 /* Initialize API routes */
 app.use(express.static(__dirname + "/express/public"));  // Public files
@@ -43,11 +42,14 @@ app.use('/api/wallet', require('./routes/wallet'));
 /* Create a Blockchain */
 let blockchain = new Blockchain().getInstance();
 
+/* Create Socket List */
+const sockets = [];
+
 
 /***************
  * Form Actions
 ***************/
-app.get("/transaction", (req, res) => {
+/*app.get("/transaction", (req, res) => {
     res.render("transaction", { txid: null });
 });
 
@@ -55,9 +57,16 @@ app.post("/transaction/create", (req, res) => {
     const { sender, recipient, amount } = req.body;
     var newBlock = blockchainUtil.createTransaction(sender, recipient, amount);
     res.render("transaction", { txid: newBlock.transaction.txid });
+});*/
+
+
+/***************
+ * Server Startup
+ **************/
+
+/* HTTP Server start up method */
+app.listen(HTTP_PORT, () => {
+  console.log(`Server is running on port ${HTTP_PORT}`);
 });
 
-/* Server start up method */
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+

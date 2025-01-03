@@ -107,7 +107,7 @@ class Blockchain {
    * @returns {Block} The genesis block
    */
   #createGenesisBlock() {
-    return new Block(0, new Date().toString(), 
+    return new Block(0, new Date().toISOString(), 
       [new Transaction(
         null,
         "04b4cb2848ac6e9f53dfc76a89edbf5c41967a6a89130f7343169f23bd0077d78251905fda5a45eb58682516e72cacb6f9d544f4c671f17c3e8e6ee80475c5d562",
@@ -140,7 +140,7 @@ class Blockchain {
     const rewardTx = new Transaction(null, miningRewardAddress, this.#miningReward, 'Mining Reward');
     this.#pendingTransactions.push(rewardTx);
 
-    const block = new Block(this.#chain.length, new Date().toString(), this.#pendingTransactions, this.getLatestBlock().hash);
+    const block = new Block(this.#chain.length, new Date().toISOString(), this.#pendingTransactions, this.getLatestBlock().hash);
     block.mineBlock(this.#difficulty);
 
     console.log('Block successfully mined!');

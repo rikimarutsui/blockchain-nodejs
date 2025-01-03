@@ -21,6 +21,7 @@ class Transaction {
     toAddress;
     amount;
     message;
+    timestamp;
 
     /**
      * @constructor
@@ -35,6 +36,7 @@ class Transaction {
         this.toAddress = toAddress;
         this.amount = amount;
         this.message = message;
+        this.timestamp = new Date().toISOString();
     }
 
     /**
@@ -44,7 +46,7 @@ class Transaction {
      * @returns {string} The hash of the transaction
      */
     calculateHash() {
-        return SHA256(this.fromAddress + this.toAddress + this.amount + this.message).toString();
+        return SHA256(this.fromAddress + this.toAddress + this.amount + this.message + this.timestamp).toString();
     }
 
     /**

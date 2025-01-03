@@ -2,9 +2,9 @@ var express = require('express')
 var router = express.Router();
 
 /* Import Blockchain */
-const { Block } = require('../app/blockchain/block');
 const { Blockchain } = require('../app/blockchain/blockchain');
 
+/* Create a new blockchain */
 let blockchain = new Blockchain().getInstance();
 
 /* APIs */

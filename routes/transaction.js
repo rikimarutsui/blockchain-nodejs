@@ -8,46 +8,13 @@ var router = express.Router();
  *  Import Blockchain 
  **********************/
 const { Blockchain } = require('../app/blockchain/blockchain');
-let blockchainUtil = require('../app/blockchain/util');
 
+/* Connect to the Blockchain */
 let blockchain = new Blockchain().getInstance();
 
 /***********
  *  APIs
  ***********/
-
-/**
- * @swagger
- * /api/transaction/create:
- *  post:
- *      description: Create a transaction
- *      responses:
- *          200:
- *              description: Success
- */
-router.post('/create', function(req, res, next) {
-    const { sender, recipient, amount } = req.body;
-    var newBlock = blockchainUtil.createTransaction(sender, recipient, amount);
-    res.json(newBlock);
-});
-
-/**
- * @swagger
- * /api/transaction/txid/:txid:
- *  get:
- *      description: Get the transaction by txid
- *      responses:
- *          200:
- *              description: Success
- */
-router.get('/txid/:txid', function(req, res, next) {
-    const { txid } = req.params;
-    const block = blockchain.chain.find(
-        (block) => block.data.txid === txid
-    );
-    res.json(block);
-});
-
 
 
 
