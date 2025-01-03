@@ -47,11 +47,6 @@ let blockchain = new Blockchain().getInstance();
 /***************
  * Form Actions
 ***************/
-
-app.get("/", (req, res) => {
-  res.render("index", { certificateId: null });
-});
-
 app.get("/transaction", (req, res) => {
     res.render("transaction", { txid: null });
 });
@@ -60,43 +55,6 @@ app.post("/transaction/create", (req, res) => {
     const { sender, recipient, amount } = req.body;
     var newBlock = blockchainUtil.createTransaction(sender, recipient, amount);
     res.render("transaction", { txid: newBlock.transaction.txid });
-});
-
-/**
- * @swagger
- * /issue-certificate:
- *  post:
- *      description: Issue a certificate
- *      responses:
- *          200:
- *              description: Success
- * 
- */
-app.post("/issue-certificate", (req, res) => {
-    const { recipient, certificateName } = req.body;
-    const  certificateId = generateCertificateId();
-    const newBlock = new Block(
-      blockchain.chain.length,
-      new Date().toString(),
-      { certificateId, recipient, certificateName }
-    );
-    blockchain.addBlock(newBlock);
-    console.log(newBlock);
-
-    res.render("index", { certificateId });
-});
-
-app.get("/verify-certificate/", (req, res) => {
-    res.render("verify", { isValid: null });
-});
-
-app.post("/verify-certificate", (req, res) => {
-    const { certificateId } = req.body;
-    const block = blockchain.chain.find(
-        (block) => block.data.certificateId === certificateId
-    );
-    const isValid = block !== undefined;
-    res.render("verify", { certificateId, isValid });
 });
 
 function generateCertificateId() {
