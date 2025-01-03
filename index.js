@@ -21,7 +21,7 @@ const swaggerOptions = {
             servers: ["http://localhost:3000"]
         }
     },
-    apis: ["./index.js", "./routes/blockchain.js", "./routes/transaction.js"]
+    apis: ["./index.js", "./routes/blockchain.js", "./routes/transaction.js", "./routes/wallet.js"]
 };
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
