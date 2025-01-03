@@ -57,13 +57,6 @@ app.post("/transaction/create", (req, res) => {
     res.render("transaction", { txid: newBlock.transaction.txid });
 });
 
-function generateCertificateId() {
-    return Math.random().toString(36).substring(2, 10);
-}
-
-
-
-
 /* Server start up method */
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
