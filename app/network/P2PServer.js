@@ -55,6 +55,7 @@ class P2PServer {
             console.log(data);
             switch (data.type) {
                 case 'NEW_BLOCK':
+                    console.log('New block received');
                     let newblock = new Block(
                         data.block.index,
                         data.block.timestamp,
@@ -63,7 +64,13 @@ class P2PServer {
                         data.block.hash,
                         data.block.nonce
                     );
-                    blockchain.addBlock(newblock);
+                    if(blockchain.isBlockValid(newblock)){
+                        blockchain.addBlock(newblock);
+                        this.broadcast({ type: 'NEW_BLOCK', block: newblock });
+                        console.log('New block added');
+                    }else{
+                        console.log('Invalid block');
+                    }
                     break;
                 case 'REPLACE_CHAIN':
                     blockchain.replaceChain(data.chain);

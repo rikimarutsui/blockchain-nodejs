@@ -330,6 +330,25 @@ class Blockchain {
   }
 
   /**
+   * @function isBlockValid
+   * @description Check if a block is valid
+   * @memberof Blockchain
+   * @param {Block} newBlock
+   * @param {Block} previousBlock
+   * @returns {boolean} True if the block is valid, false otherwise
+   */
+  isBlockValid(newBlock) {
+    if (this.getLatestBlock().index + 1 !== newBlock.index) {
+      return false;
+    } else if (this.getLatestBlock().hash !== newBlock.previousHash) {
+      return false;
+    } else if (newBlock.calculateHash() !== newBlock.hash) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
    * @function isChainValid
    * @description  Check if the chain is valid
    * @memberof Blockchain
