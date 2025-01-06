@@ -377,8 +377,8 @@ class BlockchainSingleton {
   }
 
   /**
-   * @function getInstance
    * Get the Singleton Blockchain Instance
+   * @function getInstance
    * @returns { Blockchain } The Singleton Blockchain Instance
    */
   getInstance() {

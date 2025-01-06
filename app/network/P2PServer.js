@@ -12,16 +12,14 @@ const { Blockchain } = require('../blockchain/blockchain');
 let blockchain = new Blockchain().getInstance();
 
 /**
+ * P2P Server
  * @class P2PServer
- * @description P2P Server
- * @memberof module:app/network
  * @exports P2PServer
  */
 class P2PServer {
     /**
      * @constructor
-     * @description Constructor
-     * @memberof module:app/network.P2PServer
+     * P2PServer Constructor
      * @param {string} port
      */
     constructor() {
@@ -31,9 +29,8 @@ class P2PServer {
     }
 
     /**
+     * Listen for new connections
      * @function listen
-     * @description Listen for new connections
-     * @memberof module:app/network.P2PServer
      */
     listen() {
         this.server.on('connection', socket => {
@@ -44,9 +41,8 @@ class P2PServer {
     }
 
     /**
+     * Handle messages from peers
      * @function messageHandler
-     * @description Handle messages from peers
-     * @memberof module:app/network.P2PServer
      * @param { WebSocket } socket 
      */
     messageHandler(socket) {
@@ -83,9 +79,8 @@ class P2PServer {
     }
 
     /**
+     * Broadcast a message to all peers
      * @function broadcast
-     * @description Broadcast a message to all peers
-     * @memberof module:app/network.P2PServer
      * @param { Object } message
      */
     broadcast(message) {
@@ -95,9 +90,8 @@ class P2PServer {
     }
 
     /**
+     * Connect to a peer
      * @function connectToPeer
-     * @description Connect to a peer
-     * @memberof module:app/network.P2PServer
      * @param {*} peer 
      */
     connectToPeer(peer) {
@@ -113,15 +107,13 @@ class P2PServer {
 
 /**
  * @class P2PServerSingleton
- * @description P2P Server Singleton
- * @memberof module:app/network
+ * P2P Server Singleton
  * @exports P2PServerSingleton
  */
 class P2PServerSingleton {
     /**
+     * Constructor
      * @constructor
-     * @description Constructor
-     * @memberof module:app/network.P2PServerSingleton
      */
     constructor() {
         if (!P2PServerSingleton.instance) {
@@ -130,9 +122,8 @@ class P2PServerSingleton {
     }
 
     /**
+     * Get the instance of the P2P Server
      * @function getInstance
-     * @description Get the instance of the P2P Server
-     * @memberof module:app/network.P2PServerSingleton
      * @returns {P2PServer} The instance of the P2P Server
      */
     getInstance() {
