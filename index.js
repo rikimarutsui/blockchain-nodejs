@@ -38,6 +38,7 @@ app.use(express.static("public"));                       // Public files
 app.set("view engine", "ejs");                           // Express Engine HTML files
 app.use(bodyParser.urlencoded({ extended: true }));      // Body Parser
 
+app.use('/jsdoc', express.static('out'));                // JSDoc
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs)); // Swagger document
 app.use('/api/blockchain', require('./routes/blockchain'));
 app.use('/api/transaction', require('./routes/transaction'));
