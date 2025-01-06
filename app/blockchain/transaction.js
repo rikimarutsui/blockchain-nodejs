@@ -11,8 +11,8 @@ const SHA256 = require("crypto-js/sha256");
 const { Block } = require('./block');
 
 /**
+ * Transaction class
  * @class Transaction
- * @description Transaction class
  * @exports Transaction
  */
 class Transaction {
@@ -25,12 +25,12 @@ class Transaction {
     txid;
 
     /**
+     * Create a new transaction
      * @constructor
      * @param {string} fromAddress
      * @param {string} toAddress
      * @param {number} amount
      * @param {string} message
-     * @memberof Transaction
      */
     constructor(fromAddress, toAddress, amount, message) {
         this.fromAddress = fromAddress;
@@ -42,9 +42,8 @@ class Transaction {
     }
 
     /**
+     * Calculate the hash of the transaction
      * @function calculateHash
-     * @description Calculate the hash of the transaction
-     * @memberof Transaction
      * @returns {string} The hash of the transaction
      */
     calculateHash() {
@@ -52,9 +51,8 @@ class Transaction {
     }
 
     /**
+     * Sign the transaction with the private key
      * @function signTransaction
-     * @description Sign the transaction with the private key
-     * @memberof Transaction
      * @param {keyPair} signingKey - The private key to sign the transaction with
      */
     signTransaction(signingKey) {
@@ -69,9 +67,8 @@ class Transaction {
 
 
     /**
+     * Check if the transaction is valid
      * @function isValid
-     * @description Check if the transaction is valid
-     * @memberof Transaction
      * @returns {boolean} True if the transaction is valid, false otherwise
      */
     isValid() {

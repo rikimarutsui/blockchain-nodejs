@@ -4,14 +4,14 @@
 const SHA256 = require("crypto-js/sha256");
 
 /**
+ * Block class
  * @class Block
- * @description Block class
  * @exports Block
  */
 class Block {
   /**
+   * Create a block
    * @constructor
-   * @memberof Block
    * @param {number} index
    * @param {string} timestamp
    * @param {Transaction[]} transactions 
@@ -27,9 +27,8 @@ class Block {
   }
 
   /**
+   * Calculate the hash of the block
    * @function calculateHash
-   * @description: Calculate the hash of the block
-   * @memberof Block
    * @returns {string} The hash of the block
    */
   calculateHash() {
@@ -43,9 +42,8 @@ class Block {
   }
 
   /**
+   * Mine a block with PoW
    * @function mineBlock
-   * @description: Mine a block with PoW
-   * @memberof Block
    * @param {number} difficulty 
    */
   mineBlock(difficulty) {

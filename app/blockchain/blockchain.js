@@ -6,8 +6,8 @@ const { Transaction } = require('./transaction');
 
 
 /**
+ * Blockchain class
  * @class Blockchain
- * @description Blockchain class
  * @exports Blockchain
  */
 class Blockchain {
@@ -21,9 +21,8 @@ class Blockchain {
   #miningReward;
 
   /**
+   * Create a new blockchain
    * @constructor
-   * @description Create a new blockchain
-   * @memberof Blockchain
    */
   constructor() {
     this.#chain = [this.#createGenesisBlock()];
@@ -38,9 +37,8 @@ class Blockchain {
    ******/
 
   /**
+   * Get the chain
    * @function getClain
-   * @description Get the chain
-   * @memberof Blockchain
    * @returns  {Array<Block>} The chain
    */
   getClain() {
@@ -48,9 +46,9 @@ class Blockchain {
   }
 
   /**
+   * Replace the clain
    * @function replaceChain
-   * @description Replace the clain
-   * @memberof Blockchain
+   * @param {Array<Block>} newChain
    */
   replaceChain(newChain) {
     if (newChain.length < this.#chain.length) {
@@ -66,9 +64,8 @@ class Blockchain {
   }
 
   /**
+   * Get the latest block
    * @function getLatestBlock
-   * @description Get the latest block
-   * @memberof Blockchain
    * @returns {Block} The latest block
    */
   getLatestBlock() {
@@ -76,9 +73,8 @@ class Blockchain {
   }
 
   /**
+   * Get the length of the chain
    * @function getLength
-   * @description Get the length of the chain
-   * @memberof Blockchain
    * @returns {number} The length of the chain
    */
   getLength(){
@@ -86,9 +82,8 @@ class Blockchain {
   }
 
   /**
+   * Get the block by index
    * @function getBlockByIndex
-   * @description Get the block by index
-   * @memberof Blockchain
    * @param {number} index 
    * @returns {Block} The block at the given index
    */
@@ -97,9 +92,8 @@ class Blockchain {
   }
 
   /**
+   * Get the block by hash
    * @function getBlockByHash
-   * @description Get the block by hash
-   * @memberof Blockchain
    * @param {string} hash 
    * @returns {Block} The block with the given hash
    */
@@ -108,9 +102,8 @@ class Blockchain {
   }
 
   /**
+   * Get the pending transactions
    * @function getPendingTransactions
-   * @description Get the pending transactions
-   * @memberof Blockchain
    * @returns { Transaction[] } The Pending Transactions Array
    */
   getPendingTransactions(){
@@ -118,9 +111,8 @@ class Blockchain {
   }
 
   /**
+   * Get the pending transactions from an address
    * @function getPendingTransactionsFromAddress
-   * @description Get the pending transactions from an address
-   * @memberof Blockchain
    * @param { string } fromAddress 
    * @returns { Transaction[] } The Pending Transactions Array from an address
    */
@@ -129,9 +121,8 @@ class Blockchain {
   }
 
   /**
+   * Get the pending transactions to an address
    * @function getPendingTransactionsToAddress
-   * @description Get the pending transactions to an address
-   * @memberof Blockchain
    * @param { string } toAddress
    * @returns { Transaction[] } The Pending Transactions Array to an address
    */
@@ -140,9 +131,8 @@ class Blockchain {
   }
 
   /**
+   * Get the pending balances
    * @function getPendingBalances
-   * @description Get the pending balances
-   * @memberof Blockchain
    * @returns {Object} The pending balances
    */
   getPendingBalances(){
@@ -150,9 +140,8 @@ class Blockchain {
   }
 
   /**
+   * Get the pending balance by from address
    * @function getPendingBalanceByFromAddress
-   * @description Get the pending balance by from address
-   * @memberof Blockchain
    * @param {string} fromAddress
    * @returns {number} The pending balance for the given from address
    */
@@ -165,9 +154,8 @@ class Blockchain {
    *****************/
 
   /**
+   * Get the balance of an address
    * @function getBalanceOfAddress
-   * @description Get the balance of an address
-   * @memberof Blockchain
    * @param {string} address
    * @returns {number} The balance of the address
    */
@@ -195,9 +183,8 @@ class Blockchain {
   }
 
   /**
+   * Get all transactions for a wallet
    * @function getAllTransactionsOfAddress
-   * @description Get all transactions for a wallet
-   * @memberof Blockchain
    * @param {string} address
    * @returns {Array<Transaction>} The transactions for the wallet
    */
@@ -216,9 +203,8 @@ class Blockchain {
   }
 
   /**
+   * Get the transaction by txid
    * @function getTransactionByTxid
-   * @description Get the transaction by txid
-   * @memberof Blockchain
    * @param {string} txid
    * @returns {Transaction} The transaction with the given txid
    */
@@ -241,9 +227,8 @@ class Blockchain {
    **********************/
 
   /**
+   * Create the genesis block
    * @function #createGenesisBlock
-   * @description Create the genesis block
-   * @memberof Blockchain
    * @returns {Block} The genesis block
    */
   #createGenesisBlock() {
@@ -258,9 +243,8 @@ class Blockchain {
   }
 
   /**
+   * Add a new block to the chain
    * @function addBlock
-   * @description Add a new block to the chain
-   * @memberof Blockchain
    * @param {Block} newBlock 
    */
   addBlock(newBlock) {
@@ -271,8 +255,8 @@ class Blockchain {
 
 
   /**
+   * Mine pending transactions and add a new block to the chain
    * @function minePendingTransactions
-   * @description  Mine pending transactions and add a new block to the chain
    * @param {string} miningRewardAddress - The address to receive the mining reward
    * @returns {Block} The new block that was mined
   */
@@ -293,9 +277,8 @@ class Blockchain {
   }
 
   /**
+   * Add a new transaction to the pending transactions
    * @function addTransaction
-   * @description Add a new transaction to the pending transactions
-   * @memberof Blockchain
    * @param {Transaction} transaction
    */
   addTransaction(transaction) {
@@ -330,11 +313,9 @@ class Blockchain {
   }
 
   /**
+   * Check if a block is valid
    * @function isBlockValid
-   * @description Check if a block is valid
-   * @memberof Blockchain
    * @param {Block} newBlock
-   * @param {Block} previousBlock
    * @returns {boolean} True if the block is valid, false otherwise
    */
   isBlockValid(newBlock) {
@@ -349,9 +330,8 @@ class Blockchain {
   }
 
   /**
+   * Check if the chain is valid
    * @function isChainValid
-   * @description  Check if the chain is valid
-   * @memberof Blockchain
    * @returns {boolean} True if the chain is valid, false otherwise
    */
   isChainValid() {
@@ -380,17 +360,27 @@ class Blockchain {
 
 
 /**
+ * Singleton class for the Blockchain
  * @class BlockchainSingleton
- * @description Singleton class for the Blockchain
  * @exports BlockchainSingleton
  */
 class BlockchainSingleton {
+
+  /**
+   * Create a Singleton Blockchain
+   * @constructor
+   */
   constructor() {
     if (!BlockchainSingleton.instance) {
       BlockchainSingleton.instance = new Blockchain();
     }
   }
 
+  /**
+   * @function getInstance
+   * Get the Singleton Blockchain Instance
+   * @returns { Blockchain } The Singleton Blockchain Instance
+   */
   getInstance() {
     return BlockchainSingleton.instance;
   }
