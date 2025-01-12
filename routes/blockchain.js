@@ -104,4 +104,39 @@ router.post('/mine', function(req, res, next) {
     res.json(block);
 });
 
+/**
+ * @swagger
+ * /api/blockchain/congestion:
+ *  get:
+ *      description: Get the congestion
+ *      responses:
+ *          200:
+ *              description: Success
+ */
+router.get('/congestion', function(req, res, next) {
+    res.json(blockchain.getCurrentCongestionLevel());
+});
+
+/**
+ * @swagger
+ * /api/blockchain/congestion:
+ *  post:
+ *      description: Set the congestion
+ *      parameters:
+ *          - name: level
+ *            description: The level of the congestion
+ *            in: formData
+ *            required: true
+ *            type: string
+ *      responses:
+ *          200:
+ *              description: Success
+ */
+router.post('/congestion', function(req, res, next) {
+    const level = req.body.level;
+    console.log(level);
+    blockchain.setCurrentCongestionLevel(parseInt(level));
+    res.json(blockchain.getCurrentCongestionLevel());
+});
+
 module.exports = router;

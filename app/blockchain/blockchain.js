@@ -19,6 +19,7 @@ class Blockchain {
   #pendingBalances = {};
   #difficulty;
   #miningReward;
+  #currentCongestionLevel;
 
   /**
    * Create a new blockchain
@@ -30,12 +31,16 @@ class Blockchain {
     this.#pendingBalances = {};
     this.#difficulty = 2;
     this.#miningReward = 100;
+    this.#currentCongestionLevel = 'medium';
   }
 
-  /******
-   * Getter
-   ******/
+  /*************
+   * Functions
+   *************/
 
+  /***********************
+   * Blockchain Functions
+   **********************/
   /**
    * Get the chain
    * @function getClain
@@ -149,83 +154,6 @@ class Blockchain {
     return this.#pendingBalances[fromAddress] || null;
   }
 
-  /******************
-   * Wallet Functions
-   *****************/
-
-  /**
-   * Get the balance of an address
-   * @function getBalanceOfAddress
-   * @param {string} address
-   * @returns {number} The balance of the address
-   */
-  getBalanceOfAddress(address) {
-    let balance = 0;
-
-    for (const block of this.#chain) {
-      for (const trans of block.transactions) {
-        if (trans.fromAddress === address) {
-          balance -= trans.amount;
-        }
-
-        if (trans.toAddress === address) {
-          balance += trans.amount;
-        }
-      }
-    }
-
-    // Subtract pending transactions from balance to prevent double spending
-    if (this.#pendingBalances[address]) {
-      balance = this.#pendingBalances[address];
-    }
-
-    return balance;
-  }
-
-  /**
-   * Get all transactions for a wallet
-   * @function getAllTransactionsOfAddress
-   * @param {string} address
-   * @returns {Array<Transaction>} The transactions for the wallet
-   */
-  getAllTransactionsOfAddress(address) {
-    const txs = [];
-
-    for (const block of this.#chain) {
-      for (const tx of block.transactions) {
-        if (tx.fromAddress === address || tx.toAddress === address) {
-          txs.push(tx);
-        }
-      }
-    }
-
-    return txs;
-  }
-
-  /**
-   * Get the transaction by txid
-   * @function getTransactionByTxid
-   * @param {string} txid
-   * @returns {Transaction} The transaction with the given txid
-   */
-  getTransactionByTxid(txid) {
-    for (let i = 1; i < this.#chain.length; i++) {
-      for (let j = 0; j < this.#chain[i].transactions.length; j++) {
-        if (this.#chain[i].transactions[j].txid === txid) {
-          return this.#chain[i].transactions[j];
-        }
-      }
-    }
-    return null;
-  }
-
-  /*************
-   * Functions
-   *************/
-  /***********************
-   * Blockchain Functions
-   **********************/
-
   /**
    * Create the genesis block
    * @function #createGenesisBlock
@@ -307,9 +235,17 @@ class Blockchain {
       throw new Error('Not enough balance');
     }
 
+    // Calculate Transaction Fee
+    transaction.fee = transaction.amount * this.#getCongestionMultiplier();
+    transaction.congestionPrecentage = (this.#getCongestionMultiplier() * 100) + "%";
+    transaction.congestionLevel = this.getCurrentCongestionLevel();
+    transaction.amount = transaction.amount - transaction.fee;
+
     this.#pendingBalances[transaction.fromAddress] = this.#pendingBalances[transaction.fromAddress] - transaction.amount;
 
     this.#pendingTransactions.push(transaction);
+
+    return transaction;
   }
 
   /**
@@ -349,7 +285,129 @@ class Blockchain {
     }
     return true;
   }
-}
+
+  /***********************
+   * Congestion functions
+   **********************/
+  /**
+   * Get the current congestion level
+   * @function getCurrentCongestionLevel
+   * @returns { string } The Current Congestion Level
+   */
+  getCurrentCongestionLevel(){
+    return this.#currentCongestionLevel;
+  }
+
+  /**
+   * Set the current congestion level
+   * @function setCurrentCongestionLevel
+   * @param {number} level
+   */
+  setCurrentCongestionLevel(level){
+    switch(level){
+      case 0:
+        this.#currentCongestionLevel = 'low';
+        break;
+      case 2:
+        this.#currentCongestionLevel = 'high';
+        break;
+      case 3: 
+        this.#currentCongestionLevel = 'extreme';
+        break;
+      case 1: default: 
+        this.#currentCongestionLevel = 'medium';
+        break;
+    }
+  }
+
+  /**
+   * Get the congestion multiplier
+   * @function #getCongestionMultiplier
+   */
+  #getCongestionMultiplier() {
+    switch (this.#currentCongestionLevel) {
+        case 'low':
+            return 0.01;
+        case 'high':
+            return 0.02;
+        case 'extreme':
+            return 0.025;
+        case 'medium': default:
+            return 0.015; // Default to medium congestion
+    }
+  }
+
+  /******************
+   * Wallet Functions
+   *****************/
+
+  /**
+   * Get the balance of an address
+   * @function getBalanceOfAddress
+   * @param {string} address
+   * @returns {number} The balance of the address
+   */
+  getBalanceOfAddress(address) {
+    let balance = 0;
+
+    for (const block of this.#chain) {
+      for (const trans of block.transactions) {
+        if (trans.fromAddress === address) {
+          balance -= trans.amount;
+        }
+
+        if (trans.toAddress === address) {
+          balance += trans.amount;
+        }
+      }
+    }
+
+    // Subtract pending transactions from balance to prevent double spending
+    if (this.#pendingBalances[address]) {
+      balance = this.#pendingBalances[address];
+    }
+
+    return balance;
+  }
+
+  /**
+   * Get all transactions for a wallet
+   * @function getAllTransactionsOfAddress
+   * @param {string} address
+   * @returns {Array<Transaction>} The transactions for the wallet
+   */
+  getAllTransactionsOfAddress(address) {
+    const txs = [];
+
+    for (const block of this.#chain) {
+      for (const tx of block.transactions) {
+        if (tx.fromAddress === address || tx.toAddress === address) {
+          txs.push(tx);
+        }
+      }
+    }
+
+    return txs;
+  }
+
+  /**
+   * Get the transaction by txid
+   * @function getTransactionByTxid
+   * @param {string} txid
+   * @returns {Transaction} The transaction with the given txid
+   */
+  getTransactionByTxid(txid) {
+    for (let i = 1; i < this.#chain.length; i++) {
+      for (let j = 0; j < this.#chain[i].transactions.length; j++) {
+        if (this.#chain[i].transactions[j].txid === txid) {
+          return this.#chain[i].transactions[j];
+        }
+      }
+    }
+    return null;
+  }
+
+} // End of Blockchain class
 
 
 
@@ -384,6 +442,6 @@ class BlockchainSingleton {
   getInstance() {
     return BlockchainSingleton.instance;
   }
-}
+} // End of BlockchainSingleton class
 
 module.exports.Blockchain = BlockchainSingleton;

@@ -90,12 +90,12 @@ router.post('/private', function(req, res, next) {
  */
 router.post('/send', function(req, res, next) {
     const { sender, recipient, amount, privateKey, message } = req.body;
-    const tx = new Transaction(sender, recipient, Number(amount), message);
+    var tx = new Transaction(sender, recipient, Number(amount), message);
     const wallet = new Wallet(privateKey);
     tx.signTransaction(wallet.getKeyPair());
     const isValid = tx.isValid();
     if (isValid) {
-        blockchain.addTransaction(tx);
+        tx = blockchain.addTransaction(tx);
         var signature = tx.signature;
         res.json({ tx, signature });
     } else {

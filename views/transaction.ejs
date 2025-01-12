@@ -5,38 +5,38 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Transaction Platform - Root version</title>
+    <title>Transaction Platform</title>
     <link rel="stylesheet" href="/style.css">
 </head>
 
 <body>
     <form method="post" action="/transaction/create" id="form" class="validate form">
-      <h2>Transaction Platform - Root version</h2>
+      <h2>Transaction Platform</h2>
       <p>Enter Details to create a transaction</p>
       <div class="form-field">
-        <label for="sender">Sender Name:</label>
-        <input type="text" id="recipient" name="sender" required />
+        <label for="sender">Sender Address:</label>
+        <input type="text" id="sender" name="sender" required />
       </div>
       <div class="form-field">
-        <label for="recipient">Recipient Name:</label>
+        <label for="privateKey">Sender Private Key:</label>
+        <input type="text" id="privateKey" name="privateKey" required />
+      </div>
+      <div class="form-field">
+        <label for="recipient">Recipient Address:</label>
         <input type="text" id="recipient" name="recipient" required />
       </div>
       <div class="form-field">
-        <label for="amount">HKDT:</label>
+        <label for="amount">Amount:</label>
         <input type="number" id="amount" name="amount" required />
       </div>
       <div class="form-field">
-        <input type="submit" value="Create a Transaction" />
+        <label for="message">Message:</label>
+        <input type="text" id="message" name="message"/>
       </div>
-      <div class="crtid">
-        <% if (txid) { %>
-          <p class="btn">TxID: <%= txid %>
-          </p>
-          <% } %>
+
+      <div class="form-field">
+        <input type="submit" value="Send" />
       </div>
-      <!--div class="links">
-        <a class="back" href="/verify-certificate">Verify Certificate</a>
-      </div-->
     </form>
   
   </body>

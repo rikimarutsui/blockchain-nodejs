@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transaction Platform</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <h2> Transaction Detail</h2>
+    <% if (tx) { %>
+        <h3>Fund Transfer Successfully.</h3>
+        <label for="sender">Sender Address:</label>
+        <p><%= sender %></p>
+        <label for="fromAddress">Tx From Address:</label>
+        <p><%= tx.fromAddress %></p>
+        <label for="recipient">Recipient Address:</label>
+        <p><%= recipient %></p>
+        <label for="toAddress">Tx To Address:</label>
+        <p><%= tx.toAddress %></p>
+        <label for="amount">Amount:</label>
+        <p><%= amount %></p>
+        <label for="txAmount">Tx Amount:</label>
+        <p><%= tx.amount %></p>
+        <label for="txFee">Tx Fee:</label>
+        <p><%= tx.fee %></p>
+        <label for="message">Message:</label>
+        <p><%= message %></p>
+        <label for="txMessage">Tx Message:</label>
+        <p><%= tx.message %></p>
+        <label for="txid">TxID:</label>
+        <p><%= tx.txid %></p>
+        <label for="timestamp">Timestamp:</label>
+        <p><%= tx.timestamp %></p>
+        <label for="signature">Signature:</label>
+        <p><%= signature %></p>
+    <% } else { %>
+        <h3>Fund Transfer Failed.</h3>
+    <% } %>
+</body>
+</html>

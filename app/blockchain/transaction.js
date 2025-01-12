@@ -23,6 +23,9 @@ class Transaction {
     message;
     timestamp;
     txid;
+    congestionLevel;
+    congestionPrecentage;
+    fee;
 
     /**
      * Create a new transaction

@@ -1,4 +1,5 @@
 /* Import Libraries */
+const request = require('request');
 const express = require('express');
 const bodyParser = require('body-parser');
 const swaggerUi = require('swagger-ui-express');
@@ -37,6 +38,7 @@ app.use(express.static(__dirname + "/express/public"));  // Public files
 app.use(express.static("public"));                       // Public files
 app.set("view engine", "ejs");                           // Express Engine HTML files
 app.use(bodyParser.urlencoded({ extended: true }));      // Body Parser
+app.use(bodyParser.json());                              // Body Parser
 
 app.use('/jsdoc', express.static('out'));                // JSDoc
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs)); // Swagger document
@@ -56,15 +58,52 @@ const sockets = [];
 /***************
  * Form Actions
 ***************/
-/*app.get("/transaction", (req, res) => {
-    res.render("transaction", { txid: null });
+app.get("/createWallet", (req, res) => {
+    res.render("createWallet", { address: null, privateKey: null });
+})
+
+app.post("/wallet/create", (req, res) => {
+    return new Promise((resolve, reject) => {
+        request(req.protocol + '://' + req.get('host') + '/api/wallet/create', { json: true }, (err, res, body) => {
+            if (err) { reject(err); }
+            resolve(body);
+        });
+    }).then((body) => {
+        res.render("createWallet", { address: body.address, privateKey: body.privateKey });
+    }).catch((err) => {
+        console.log(err);
+    }); 
 });
 
+
+app.get("/transaction", (req, res) => {
+    res.render("transaction");
+});
+
+
 app.post("/transaction/create", (req, res) => {
-    const { sender, recipient, amount } = req.body;
-    var newBlock = blockchainUtil.createTransaction(sender, recipient, amount);
-    res.render("transaction", { txid: newBlock.transaction.txid });
-});*/
+    const { sender, privateKey, recipient, amount, message } = req.body;
+    return new Promise((resolve, reject) => {
+        request.post(req.protocol + '://' + req.get('host') + '/api/wallet/send', 
+        {   json: true, 
+            body: { sender, recipient, amount, privateKey, message } 
+        }, (err, res, body) => {
+            if (err) { reject(err); }
+            resolve(body);
+        });
+    }).then((body) => {
+        res.render("transactionDetail", {
+            sender: sender,
+            recipient: recipient,
+            amount: amount,
+            message: message,
+            tx: body.tx,
+            signature: body.signature
+        });
+    }).catch((err) => {
+        console.log(err);
+    });
+});
 
 
 /***************
