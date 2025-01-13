@@ -17,6 +17,7 @@ class Blockchain {
   #chain = [];
   #pendingTransactions = [];
   #pendingBalances = {};
+  #pendingFee = 0;
   #difficulty;
   #miningReward;
   #currentCongestionLevel;
@@ -155,6 +156,24 @@ class Blockchain {
   }
 
   /**
+   * Get the reward
+   * @function getReward
+   * @returns {number} The mining reward
+   */
+  getReward(){
+    return this.#miningReward;
+  }
+
+  /**
+   * Get the pending fee as a reward
+   * @function getPendingFee
+   * @returns {number} The pending fee
+   */
+  getPendingFee(){
+    return this.#pendingFee;
+  }
+
+  /**
    * Create the genesis block
    * @function #createGenesisBlock
    * @returns {Block} The genesis block
@@ -189,7 +208,7 @@ class Blockchain {
    * @returns {Block} The new block that was mined
   */
   minePendingTransactions(miningRewardAddress) {
-    const rewardTx = new Transaction(null, miningRewardAddress, this.#miningReward, 'Mining Reward');
+    const rewardTx = new Transaction(null, miningRewardAddress, (this.#miningReward + this.#pendingFee), 'Mining Reward');
     this.#pendingTransactions.push(rewardTx);
 
     const block = new Block(this.#chain.length, new Date().toISOString(), this.#pendingTransactions, this.getLatestBlock().hash);
@@ -200,6 +219,7 @@ class Blockchain {
 
     this.#pendingTransactions = [];
     this.#pendingBalances = {};
+    this.#pendingFee = 0;
 
     return block;
   }
@@ -241,8 +261,8 @@ class Blockchain {
     transaction.congestionLevel = this.getCurrentCongestionLevel();
     transaction.amount = transaction.amount - transaction.fee;
 
-    this.#pendingBalances[transaction.fromAddress] = this.#pendingBalances[transaction.fromAddress] - transaction.amount;
-
+    this.#pendingBalances[transaction.fromAddress] = this.#pendingBalances[transaction.fromAddress] - (transaction.amount + transaction.fee);
+    this.#pendingFee = this.#pendingFee + transaction.fee;
     this.#pendingTransactions.push(transaction);
 
     return transaction;
@@ -353,7 +373,7 @@ class Blockchain {
     for (const block of this.#chain) {
       for (const trans of block.transactions) {
         if (trans.fromAddress === address) {
-          balance -= trans.amount;
+          balance -= (trans.amount + trans.fee); 
         }
 
         if (trans.toAddress === address) {
